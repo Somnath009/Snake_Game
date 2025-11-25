@@ -13,6 +13,7 @@ body {
 :root{
     /* background color */
     --bg-primary-color: #0c0c0c;
+    --bg-fill-color: rgb(255, 245, 245);
 
     /* text color */
     --text-primary-color: #f0f0f0;
@@ -73,12 +74,17 @@ section .infos{
     border: 2px solid var(--border-primary-color);
     flex-grow: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
-    grid-template-rows: repeat(auto-fill, minmax(30px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
 }
 
 .block{
-    width: 30px;
-    height: 30px;
+    /* width: 30px;
+    height: 30px; */
     border: 1px solid var(--border-primary-color);
+}
+
+.fill{
+    background-color: var(--bg-fill-color);
+    border-radius: var(--border-radius-md);
 }
