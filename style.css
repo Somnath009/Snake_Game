@@ -13,8 +13,8 @@ body {
 :root{
     /* background color */
     --bg-primary-color: #0c0c0c;
-    --bg-fill-color: rgb(255, 245, 245);
-    --bg-food-color: rgb(255, 136, 0);
+    --bg-fill-color: rgb(96, 224, 21);
+    --bg-food-color: rgb(244, 169, 19);
 
     /* text color */
     --text-primary-color: #f0f0f0;

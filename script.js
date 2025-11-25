@@ -5,9 +5,19 @@ const startGameModal = document.querySelector(".start-game");
 const gameOverModal = document.querySelector(".game-over");
 const restartButton = document.querySelector(".btn-restart");
 
+const highScoreElement = document.querySelector("#high-score");
+const scoreElement = document.querySelector("#score");
+const timeElement = document.querySelector("#time");
+
 
 const blockHeight = 80;
 const blockWidth = 80;
+
+let highScore = localStorage.getItem("highScore") || 0;
+let score = 0;
+let time = `00:00`;
+
+highScoreElement.innerText = highScore;
 
 const blocks = [];
 let snake = [
@@ -17,9 +27,9 @@ let snake = [
   }
 ];
 
-let direction = "down"
-let intervalId = null
-
+let direction = "down";
+let intervalId = null;
+let timerIntervalId = null;
 
 
 const cols = Math.floor(board.clientWidth / blockWidth);
@@ -43,6 +53,7 @@ for (let row = 0; row < rows; row++) {
 function render(){
   let head = null;
 
+  // food spawn
   blocks[`${food.x}-${food.y}`].classList.add("food")
 
   if(direction == "left"){
@@ -65,12 +76,21 @@ function render(){
     return;
   }
 
+  // food consume
   if(head.x == food.x && head.y == food.y){
     blocks[`${food.x}-${food.y}`].classList.remove("food")
     food = {x: Math.floor(Math.random()*rows), y: Math.floor(Math.random()*cols)}
     blocks[`${food.x}-${food.y}`].classList.add("food")
 
     snake.unshift(head)
+
+    score += 10;
+    scoreElement.innerText = score
+
+    if(score > highScore){
+      highScore = score;
+      localStorage.setItem("highScore", highScore.toString())
+    }
   }
 
   snake.forEach((segment) => {
@@ -87,16 +107,27 @@ function render(){
   })
 }
 
-// intervalId = setInterval(() => {
-  
-//   render();
-// }, 300);
-
 startButton.addEventListener("click", () => {
   modal.style.display = "none"
 
   intervalId = setInterval(() => { render() }, 300);
-})
+  timerIntervalId = setInterval(() => {
+    let [min , sec] = time.split(":").map(Number);
+
+    if(sec == 59){
+      min += 1;
+      sec = 0;
+    } else {
+      sec += 1
+    }
+    const formattedMin = String(min).padStart(2, "0");
+    const formattedSec = String(sec).padStart(2, "0");
+
+    time = `${formattedMin}:${formattedSec}`;
+    timeElement.innerText = time;
+  }, 1000);
+
+});
 
 restartButton.addEventListener("click", restartGame)
 
@@ -107,6 +138,13 @@ function restartGame(){
     blocks[`${segment.x}-${segment.y}`].classList.remove("fill")
   })
 
+  score = 0;
+  time = `00:00`;
+
+  highScoreElement.innerText = highScore;
+  scoreElement.innerText = score;
+  timeElement.innerText = time;
+
   modal.style.display = "none";
   snake = [{x: 1, y: 3}];
   direction = "down"
@@ -114,6 +152,8 @@ function restartGame(){
   intervalId = setInterval(() => { render() }, 300);
 
 }
+
+
 
 addEventListener("keydown", (dets) => {
   if(dets.key == "ArrowUp"){
