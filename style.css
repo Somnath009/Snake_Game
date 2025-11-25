@@ -126,3 +126,11 @@ section .infos{
     align-items: center;
     gap: var(--space-lg)
 }
+
+.modal .game-over{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    display: none;
+}
